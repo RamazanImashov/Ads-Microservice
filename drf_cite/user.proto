@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+service UserService {
+  rpc GetUser (UserRequest) returns (UserResponse);
+  rpc CheckVerifyToken (TokenRequest) returns (TokenResponse);
+}
+
+message UserRequest {
+  int32 user_id = 1;
+}
+
+message UserResponse {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  bool is_valid = 4;
+}
+
+message TokenRequest {
+  string token = 1;
+}
+
+message TokenResponse {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  bool is_valid = 4;
+}

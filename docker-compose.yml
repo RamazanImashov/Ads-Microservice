@@ -1,0 +1,94 @@
+version: "3"
+services:
+  django-auth:
+    build: ./drf_cite
+    container_name: django-auth
+    env_file:
+      - .env
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./drf_cite:/usr/src/app
+      - static_volume:/usr/src/app/back-static
+      - media_volume:/usr/src/app/back-media
+    restart: always
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8003"
+    depends_on:
+      - micro-postgres-drf
+    links:
+      - micro-postgres-drf
+
+  fastapi-ads:
+    build: ./fa_cite
+    container_name: fastapi-ads
+    command: sh -c "alembic upgrade head && uvicorn main:app --port 8004 --host 0.0.0.0"
+    volumes:
+      - ./fa_cite:/app
+    ports:
+      - "8004:8004"
+    depends_on:
+      - micro-postgres-fa
+    links:
+      - micro-postgres-fa
+
+  micro-postgres-drf:
+    image: postgres:14
+    container_name: micro-postgres-drf
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_DRF}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5433:5433"
+    volumes:
+      - postgres_data_drf:/var/lib/postgresql/data
+
+  micro-postgres-fa:
+    image: postgres:14
+    container_name: micro-postgres-fa
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME_FA}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data_fa:/var/lib/postgresql/data
+
+  micro-nginx:
+    image: nginx
+    container_name: micro-nginx
+    restart: always
+    ports:
+      - 89:89
+#      - 443:443
+    volumes:
+      - ./nginx/no_front_no_ssl/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/usr/src/app/back-static
+      - media_volume:/usr/src/app/back-media
+#      - /etc/ssl:/etc/ssl
+    depends_on:
+      - fastapi-ads
+      - micro-postgres-fa
+      - micro-postgres-drf
+
+  grpc-server:
+    build: ./drf_cite
+    container_name: grpc-server
+    restart: always
+    command: sh -c "python grpc_server.py"
+    ports:
+      - "50051:50051"
+    depends_on:
+      - fastapi-ads
+      - micro-postgres-fa
+      - micro-postgres-drf
+      - django-auth
+
+volumes:
+  postgres_data_drf:
+  postgres_data_fa:
+  static_volume:
+  media_volume:
