@@ -12,12 +12,16 @@ class Query(graphene.ObjectType):
     products = graphene.List(graphene.String)
     cart = graphene.Field(graphene.String, user_id=graphene.Int())
 
-    def django_users(self, info):
-        response = requests.get(f"http://{DRF_URL}:8080/products")
+    def get_django_users(self, info):
+        response = requests.get(f"http://{DRF_URL}:8003/users/api/v1/users/user")
         return response.json()
 
-    def fastapi_ads(self, info, user_id):
-        response = requests.get(f"http://{FA_URL}:8001/cart/?user_id={user_id}")
+    def get_fastapi_ads(self, info):
+        response = requests.get(f"http://{FA_URL}:8004/ad/ads/")
+        return response.json()
+    
+    def get_id_fastapi_ads(self, info, ads_id):
+        response = requests.get(f"http://{FA_URL}:8004/ad/ads/{ads_id}/")
         return response.json()
 
 app = FastAPI()
