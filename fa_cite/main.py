@@ -10,7 +10,7 @@ import os
 from src.advertisements.router import router as advertisement_router
 
 
-app = FastAPI(root_path="/ads", root_path_in_servers=False)
+app = FastAPI(root_path="/ads")
 
 
 @app.exception_handler(ValidationException)
