@@ -1,6 +1,6 @@
 # gateway/main.py
 from fastapi import FastAPI
-from starlette.graphql import GraphQLApp
+from starlette_graphene3 import GraphQLApp
 import graphene
 import requests
 from decouple import config
