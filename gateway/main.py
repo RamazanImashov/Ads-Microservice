@@ -22,7 +22,7 @@ async def proxy_users(request: Request, path: str):
         )
         return response.json()
 
-@app.api_route("/ads/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
+@app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE"])
 async def proxy_ads(request: Request, path: str):
     async with httpx.AsyncClient() as client:
         response = await client.request(
