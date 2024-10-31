@@ -10,7 +10,7 @@ import os
 from src.advertisements.router import router as advertisement_router
 
 
-app = FastAPI(root_path="/ads")
+app = FastAPI()
 
 
 @app.exception_handler(ValidationException)
@@ -19,11 +19,6 @@ async def validation_exception_handler(request: Request, exc:ValidationException
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder({"detail": exc.errors()})
     )
-
-
-@app.get("/ads/openapi.json", include_in_schema=False)
-async def get_openapi_json():
-    return FileResponse(os.path.join(os.getcwd(), "openapi.json"))
 
 
 app.include_router(advertisement_router)
