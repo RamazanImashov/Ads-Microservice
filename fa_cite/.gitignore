@@ -8,6 +8,8 @@ PyWhatKit_DB.txt
 
 Makefile
 
+openapi.json
+
 *.egg-info/
 .installed.cfg
 *.egg

@@ -7,4 +7,6 @@ COPY req.txt ./
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r req.txt
 
+RUN python scriptyp.py
+
 COPY . .
