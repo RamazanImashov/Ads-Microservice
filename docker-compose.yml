@@ -107,7 +107,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/any_conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/any_conf/nginx_gateway.conf:/etc/nginx/nginx.conf
       - static_volume:/usr/src/app/back-static
       - media_volume:/usr/src/app/back-media
     depends_on:
