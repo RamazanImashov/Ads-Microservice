@@ -21,6 +21,11 @@ async def validation_exception_handler(request: Request, exc:ValidationException
     )
 
 
+@app.get("/ads/openapi.json", include_in_schema=False)
+async def get_openapi_json():
+    return FileResponse(os.path.join(os.getcwd(), "openapi.json"))
+
+
 app.include_router(advertisement_router)
 
 if __name__ == "__main__":
