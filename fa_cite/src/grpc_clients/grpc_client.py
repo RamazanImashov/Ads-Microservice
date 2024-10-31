@@ -5,8 +5,8 @@ import sys
 sys.path.append(os.path.abspath("/Users/ramazanimashovgmail.com/Developer/practice/microservice/first_poroject"))
 
 import grpc
-import user_pb2
-import user_pb2_grpc
+from . import user_pb2
+from . import user_pb2_grpc
 
 
 channel = grpc.insecure_channel('[::]:50051')
