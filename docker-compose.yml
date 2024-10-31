@@ -31,6 +31,20 @@ services:
     networks:
       - app-network
 
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    command: sh -c "uvicorn main:app --port 8005 --host 0.0.0.0"
+    volumes:
+      - ./gateway:/app
+    ports:
+      - "8005:8005"
+    depends_on:
+      - django-auth
+      - fastapi-ads
+    networks:
+      - app-network
+
   micro-postgres-drf:
     image: postgres:14
     container_name: micro-postgres-drf
