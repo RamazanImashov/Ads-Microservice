@@ -28,10 +28,10 @@ DATABASES = {
 #     }
 # }
 
-STATIC_URL = "/back-static/"
+STATIC_URL = "/users/back-static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "back-static")
 
-MEDIA_URL = '/back-media/'
+MEDIA_URL = '/users/back-media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "back-media")
 
 # CSRF_TRUSTED_ORIGINS = ["https://sr.horizon-logistics.co", "http://167.99.243.166",

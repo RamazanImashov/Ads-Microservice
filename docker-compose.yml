@@ -31,19 +31,44 @@ services:
     networks:
       - app-network
 
-  gateway:
-    build: ./gateway
-    container_name: gateway
-    command: sh -c "uvicorn main:app --port 8005 --host 0.0.0.0"
+
+  nginx-users:
+    image: nginx
+    container_name: nginx-users
     volumes:
-      - ./gateway:/app
+      - ./nginx/any_conf/nginx_users.conf:/etc/nginx/nginx.conf
     ports:
-      - "8005:8005"
+      - "8083:8083"
     depends_on:
       - django-auth
+    networks:
+      - app-network
+
+  nginx-ads:
+    image: nginx
+    container_name: nginx-ads
+    volumes:
+      - ./nginx/any_conf/nginx_ads.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8084:8084"
+    depends_on:
       - fastapi-ads
     networks:
       - app-network
+
+  # gateway:
+  #   build: ./gateway
+  #   container_name: gateway
+  #   command: sh -c "uvicorn main:app --port 8005 --host 0.0.0.0"
+  #   volumes:
+  #     - ./gateway:/app
+  #   ports:
+  #     - "8005:8005"
+  #   depends_on:
+  #     - django-auth
+  #     - fastapi-ads
+  #   networks:
+  #     - app-network
 
   micro-postgres-drf:
     image: postgres:14
@@ -82,7 +107,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./nginx/no_front_no_ssl/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/any_conf/nginx.conf:/etc/nginx/nginx.conf
       - static_volume:/usr/src/app/back-static
       - media_volume:/usr/src/app/back-media
     depends_on:
