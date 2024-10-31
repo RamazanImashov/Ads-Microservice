@@ -15,8 +15,8 @@ services:
     command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8003"
     depends_on:
       - micro-postgres-drf
-    links:
-      - micro-postgres-drf
+    networks:
+      - app-network
 
   fastapi-ads:
     build: ./fa_cite
@@ -28,8 +28,8 @@ services:
       - "8004:8004"
     depends_on:
       - micro-postgres-fa
-    links:
-      - micro-postgres-fa
+    networks:
+      - app-network
 
   micro-postgres-drf:
     image: postgres:14
@@ -43,6 +43,8 @@ services:
       - "5433:5433"
     volumes:
       - postgres_data_drf:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   micro-postgres-fa:
     image: postgres:14
@@ -56,26 +58,24 @@ services:
       - "5434:5432"
     volumes:
       - postgres_data_fa:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   micro-nginx:
     image: nginx
     container_name: micro-nginx
     restart: always
     ports:
-      - 89:89
-#      - 443:443
+      - 80:80
     volumes:
       - ./nginx/no_front_no_ssl/nginx.conf:/etc/nginx/nginx.conf
       - static_volume:/usr/src/app/back-static
       - media_volume:/usr/src/app/back-media
-#      - /etc/ssl:/etc/ssl
     depends_on:
+      - django-auth
       - fastapi-ads
-      - micro-postgres-fa
-      - micro-postgres-drf
     networks:
-          - app-network
-
+      - app-network
 
   grpc-server:
     build: ./drf_cite
@@ -85,15 +85,17 @@ services:
     ports:
       - "50051:50051"
     depends_on:
-      - fastapi-ads
-      - micro-postgres-fa
-      - micro-postgres-drf
       - django-auth
+      - fastapi-ads
+    networks:
+      - app-network
 
 volumes:
   postgres_data_drf:
   postgres_data_fa:
   static_volume:
   media_volume:
+
+networks:
   app-network:
     driver: bridge
