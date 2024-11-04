@@ -19,7 +19,7 @@ async def get_all_advertisements(
     stmt = select(AdvertisementModel).order_by(AdvertisementModel.id)
     result = await session.scalars(stmt)
     ads = result.all()
-    return ads
+    return [GetAdvertisementSchema.from_orm(ad) for ad in ads]
 
 
 async def get_id_advertisement(
@@ -28,7 +28,10 @@ async def get_id_advertisement(
 ) -> Sequence[AdvertisementModel]:
     stmt = select(AdvertisementModel).where(AdvertisementModel.id == ads_id)
     result = await session.scalars(stmt)
-    return result.first()
+    ad = result.first()
+    if ad is None:
+        raise HTTPException(status_code=404, detail="Advertisement not found")
+    return GetAdvertisementSchema.from_orm(ad)
 
 
 async def create_advertisements(
