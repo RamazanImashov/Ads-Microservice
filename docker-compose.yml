@@ -1,8 +1,9 @@
 version: "3"
 services:
   django-auth:
-    build: ./drf_cite
-    docker_file: Dockerfile.drf
+    build:       
+      context: ./drf_cite
+      dockerfile: Dockerfile.drf
     container_name: django-auth
     env_file:
       - .env
@@ -104,8 +105,9 @@ services:
       - app-network
 
   grpc-server:
-    build: ./drf_cite
-    docker_file: Dockerfile.grpc_server
+    build:       
+      context: ./drf_cite
+      dockerfile: Dockerfile.grpc_server
     container_name: grpc-server
     restart: always
     command: sh -c "python grpc_server.py"
