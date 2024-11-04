@@ -25,7 +25,7 @@ async def get_ads(
             AsyncSession,
             Depends(db_helper.session_getter),
         ],
-):
+) -> list[GetAdvertisementSchema]:
     ads = await get_all_advertisements(session=session)
     return ads
 
@@ -37,7 +37,7 @@ async def get_ads_id(
             AsyncSession,
             Depends(db_helper.session_getter),
         ]
-):
+) -> GetAdvertisementSchema:
     ads = await get_id_advertisement(ads_id=ads_id, session=session)
     return ads
 
