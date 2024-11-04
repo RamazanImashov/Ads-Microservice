@@ -9,7 +9,7 @@ from . import user_pb2
 from . import user_pb2_grpc
 
 
-channel = grpc.insecure_channel('[::]:50051')
+channel = grpc.insecure_channel('0.0.0.0:50051')
 stub = user_pb2_grpc.UserServiceStub(channel)
 
 
