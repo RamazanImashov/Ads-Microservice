@@ -19,7 +19,7 @@ async def get_all_advertisements(
     stmt = select(AdvertisementModel).order_by(AdvertisementModel.id)
     result = await session.scalars(stmt)
     ads = result.all()
-    return [GetAdvertisementSchema.from_orm(ad) for ad in ads]
+    return ads
 
 
 async def get_id_advertisement(
