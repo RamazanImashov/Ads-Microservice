@@ -15,17 +15,16 @@ from .schema import AdvertisementSchema, CreateAdvertisementSchema, GetAdvertise
 
 async def get_all_advertisements(
         session: AsyncSession
-) -> list[GetAdvertisementSchema]:
+) -> Sequence[AdvertisementModel]:
     stmt = select(AdvertisementModel).order_by(AdvertisementModel.id)
     result = await session.scalars(stmt)
-    ads = result.all()
-    return ads
+    return result.all()
 
 
 async def get_id_advertisement(
         ads_id: int,
         session: AsyncSession
-) -> GetAdvertisementSchema:
+) -> Sequence[AdvertisementModel]:
     stmt = select(AdvertisementModel).where(AdvertisementModel.id == ads_id)
     result = await session.scalars(stmt)
     ad = result.first()
