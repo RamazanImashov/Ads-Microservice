@@ -1,11 +1,11 @@
 
-from typing import Sequence, Optional
+from typing import Sequence
 
-from fastapi import HTTPException, Header, Request
+from fastapi import HTTPException, Request
 
 from ..grpc_clients.grpc_client import get_user, verify_token
 
-from sqlalchemy import select, insert
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .model import AdvertisementModel
@@ -15,23 +15,23 @@ from .schema import AdvertisementSchema, CreateAdvertisementSchema, GetAdvertise
 
 async def get_all_advertisements(
         session: AsyncSession
-) -> Sequence[AdvertisementModel]:
+) -> list[GetAdvertisementSchema]:
     stmt = select(AdvertisementModel).order_by(AdvertisementModel.id)
     result = await session.scalars(stmt)
     ads = result.all()
-    return [GetAdvertisementSchema.from_orm(ad) for ad in ads]
+    return ads
 
 
 async def get_id_advertisement(
         ads_id: int,
         session: AsyncSession
-) -> Sequence[AdvertisementModel]:
+) -> GetAdvertisementSchema:
     stmt = select(AdvertisementModel).where(AdvertisementModel.id == ads_id)
     result = await session.scalars(stmt)
     ad = result.first()
     if ad is None:
         raise HTTPException(status_code=404, detail="Advertisement not found")
-    return GetAdvertisementSchema.from_orm(ad)
+    return ad
 
 
 async def create_advertisements(

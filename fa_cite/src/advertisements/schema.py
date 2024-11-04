@@ -8,8 +8,7 @@ class GetAdvertisementSchema(BaseModel):
     price: float
     user_id: int
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AdvertisementSchema(BaseModel):
@@ -18,8 +17,8 @@ class AdvertisementSchema(BaseModel):
     price: float
     user_id: int
 
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
     model_config = ConfigDict(from_attributes=True)
 
 
