@@ -8,6 +8,9 @@ class GetAdvertisementSchema(BaseModel):
     price: float
     user_id: int
 
+    class Config:
+        orm_mode = True
+
 
 class AdvertisementSchema(BaseModel):
     title: str
