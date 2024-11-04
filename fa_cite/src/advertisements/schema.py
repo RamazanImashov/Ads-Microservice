@@ -20,6 +20,7 @@ class AdvertisementSchema(BaseModel):
 
     class Config:
         orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CreateAdvertisementSchema(BaseModel):
