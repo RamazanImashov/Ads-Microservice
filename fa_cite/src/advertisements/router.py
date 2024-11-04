@@ -19,7 +19,7 @@ router = APIRouter(
 )
 
 
-@router.get("/ads/", response_model=GetAdvertisementSchema)
+@router.get("/ads/")
 async def get_ads(
         session: Annotated[
             AsyncSession,
@@ -30,7 +30,7 @@ async def get_ads(
     return ads
 
 
-@router.get("/ads/{ads_id}/", response_model=GetAdvertisementSchema)
+@router.get("/ads/{ads_id}/")
 async def get_ads_id(
         ads_id: int,
         session: Annotated[
