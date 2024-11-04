@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from .serializers import (
     LoginSerializer,
     ForgotPasswordSerializer, UsersSerializer,
-    RegisterFromEmailSerializer, RegisterFromPhoneSerializer,
+    RegisterFromEmailSerializer,
 )
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -28,15 +28,8 @@ from rest_framework.decorators import action
 User = get_user_model()
 
 
-@extend_schema(tags=['User'])
-class UsersView(ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UsersSerializer
-    pagination_class = None
-
-
 @extend_schema(tags=['Profile'])
-class UsersProView(ModelViewSet):
+class UsersView(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
     pagination_class = None
@@ -64,23 +57,6 @@ class RegisterFromEmailView(APIView):
         data = request.data
         status_code = self.service.register_email(data)
         return Response({"data": "Good, Registration successful for email",
-                         "status": status_code}, status=status_code)
-
-
-@extend_schema(tags=['Register'])
-class RegisterFromPhoneView(APIView):
-    service = RegisterService()
-    permission_classes = (AllowAny,)
-
-    @extend_schema(
-        description="A description of the endpoint",
-        request=RegisterFromPhoneSerializer,
-        responses={200: RegisterFromPhoneSerializer}
-    )
-    def post(self, request):
-        data = request.data
-        status_code = self.service.register_phone(data)
-        return Response({"data": "Good, Registration successful for phone",
                          "status": status_code}, status=status_code)
 
 

@@ -1,6 +1,6 @@
 from rest_framework.serializers import ValidationError
 from django.contrib.auth import get_user_model, authenticate
-from .tasks import send_password_celery, send_activation_code_celery, send_sms_task
+from .tasks import send_password_celery
 from rest_framework import serializers
 
 

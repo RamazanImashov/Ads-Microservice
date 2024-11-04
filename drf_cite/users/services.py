@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 
 from .serializers import (
     RegisterFromEmailSerializer,
-    RegisterFromPhoneSerializer,
     ChangePasswordSerializer,
     ForgotPasswordCompleteSerializer,
 )
@@ -20,13 +19,6 @@ class RegisterService:
     @staticmethod
     def register_email(data):
         serializer = RegisterFromEmailSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return status.HTTP_201_CREATED
-
-    @staticmethod
-    def register_phone(data):
-        serializer = RegisterFromPhoneSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return status.HTTP_201_CREATED

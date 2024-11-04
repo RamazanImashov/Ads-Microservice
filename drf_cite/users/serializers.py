@@ -33,20 +33,6 @@ class RegisterFromEmailSerializer(serializers.ModelSerializer):
         return RegisterValidator.create(validated_data=validated_data)
 
 
-class RegisterFromPhoneSerializer(serializers.ModelSerializer):
-    password_confirm = serializers.CharField(min_length=6, required=True)
-
-    class Meta:
-        model = User
-        fields = ["username", "phone_number", "password", "password_confirm"]
-
-    def validate(self, attrs):
-        return RegisterValidator.validate(attrs=attrs)
-
-    def create(self, validated_data):
-        return RegisterValidator.create(validated_data=validated_data)
-
-
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(required=True)
