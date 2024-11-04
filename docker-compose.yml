@@ -1,7 +1,8 @@
 version: "3"
 services:
   django-auth:
-    build: ./drf_cite/Dockerfile.drf
+    build: ./drf_cite
+    docker_file: Dockerfile.drf
     container_name: django-auth
     env_file:
       - .env
@@ -56,20 +57,6 @@ services:
     networks:
       - app-network
 
-  # gateway:
-  #   build: ./gateway
-  #   container_name: gateway
-  #   command: sh -c "uvicorn main:app --port 8005 --host 0.0.0.0"
-  #   volumes:
-  #     - ./gateway:/app
-  #   ports:
-  #     - "8005:8005"
-  #   depends_on:
-  #     - django-auth
-  #     - fastapi-ads
-  #   networks:
-  #     - app-network
-
   micro-postgres-drf:
     image: postgres:14
     container_name: micro-postgres-drf
@@ -117,7 +104,8 @@ services:
       - app-network
 
   grpc-server:
-    build: ./drf_cite/Dockerfile.grpc_server
+    build: ./drf_cite
+    docker_file: Dockerfile.grpc_server
     container_name: grpc-server
     restart: always
     command: sh -c "python grpc_server.py"
