@@ -105,7 +105,7 @@ services:
       - app-network
 
   grpc-server:
-    build:       
+    build:
       context: ./drf_cite
       dockerfile: Dockerfile.grpc_server
     container_name: grpc-server
@@ -113,9 +113,6 @@ services:
     command: sh -c "python grpc_server.py"
     ports:
       - "50051:50051"
-    depends_on:
-      - django-auth
-      - fastapi-ads
     networks:
       - app-network
 
